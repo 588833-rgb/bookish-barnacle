@@ -400,6 +400,7 @@ nav a.active {
 .hero-cta:hover {
   transform: translateY(-2px);
   box-shadow: 0 12px 32px rgba(255, 8, 68, 0.6);
+  animation: pulse 0.4s ease;
 }
 
 .hero-cta-secondary {
@@ -417,6 +418,7 @@ nav a.active {
 .hero-cta-secondary:hover {
   border-color: var(--accent);
   background: var(--accent-soft);
+  animation: wiggle 0.4s ease;
 }
 
 .socials {
@@ -441,8 +443,9 @@ nav a.active {
 .social-btn:hover {
   background: var(--accent-soft);
   border-color: var(--accent);
-  transform: translateY(-2px);
+  transform: translateY(-2px) rotate(5deg);
   box-shadow: 0 4px 20px rgba(255, 8, 68, 0.4);
+  animation: wiggle 0.5s ease;
 }
 
 .social-btn img {
@@ -468,6 +471,12 @@ nav a.active {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
   width: 100%;
   max-width: 600px;
+  transition: all 0.3s ease;
+}
+
+.code-window:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 24px 80px rgba(255, 8, 68, 0.3);
 }
 
 .code-header {
@@ -689,6 +698,10 @@ nav a.active {
   box-shadow: 0 12px 48px rgba(255, 8, 68, 0.25);
 }
 
+.portfolio-card:hover .portfolio-card-preview svg {
+  animation: bounce 0.6s ease;
+}
+
 .portfolio-card-preview {
   width: 100%;
   height: 220px;
@@ -747,6 +760,15 @@ nav a.active {
   font-size: 12px;
   border-radius: 6px;
   font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.tag:hover {
+  background: var(--accent);
+  color: #000;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(255, 8, 68, 0.4);
 }
 
 .portfolio-card-footer {
@@ -872,6 +894,24 @@ nav a.active {
   overflow: hidden;
 }
 
+.pricing-card::after {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255, 8, 68, 0.05), transparent);
+  transform: rotate(45deg);
+  transition: all 0.6s ease;
+  opacity: 0;
+}
+
+.pricing-card:hover::after {
+  animation: shimmer 1.5s ease-in-out;
+  opacity: 1;
+}
+
 .pricing-card.popular {
   border-color: var(--accent);
   box-shadow: 0 8px 32px rgba(255, 8, 68, 0.2);
@@ -895,6 +935,7 @@ nav a.active {
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  animation: pulse 2s ease-in-out infinite;
 }
 
 .pricing-card h3 {
@@ -968,6 +1009,7 @@ nav a.active {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(255, 8, 68, 0.5);
   background: var(--gradient-1);
+  animation: pulse 0.5s ease;
 }
 
 .schedule {
@@ -1001,6 +1043,7 @@ nav a.active {
   border-color: var(--accent);
   transform: translateX(4px);
   box-shadow: 0 8px 32px rgba(255, 8, 68, 0.2);
+  animation: wiggle 0.5s ease;
 }
 
 .schedule-icon {
@@ -1012,6 +1055,11 @@ nav a.active {
   align-items: center;
   justify-content: center;
   margin-bottom: 16px;
+  transition: all 0.4s ease;
+}
+
+.schedule-card:hover .schedule-icon {
+  animation: bounce 0.6s ease;
 }
 
 .schedule-icon svg {
@@ -1084,6 +1132,7 @@ nav a.active {
   outline: none;
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-soft);
+  animation: scaleIn 0.3s ease;
 }
 
 .form-group textarea {
@@ -1107,6 +1156,7 @@ nav a.active {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(255, 8, 68, 0.5);
   background: var(--gradient-1);
+  animation: pulse 0.5s ease;
 }
 
 .schedule-btn:disabled {
@@ -1300,6 +1350,122 @@ footer {
 
   .code-window {
     max-width: 100%;
+  }
+}
+
+@keyframes slideInFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInFromRight {
+  0% {
+    opacity: 0;
+    transform: translateX(50px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -1000px 0;
+  }
+  100% {
+    background-position: 1000px 0;
+  }
+}
+
+@keyframes borderGlow {
+  0%, 100% {
+    box-shadow: 0 0 5px var(--accent), 0 0 10px var(--accent);
+  }
+  50% {
+    box-shadow: 0 0 10px var(--accent), 0 0 20px var(--accent), 0 0 30px var(--accent);
+  }
+}
+
+@keyframes rotate3d {
+  0% {
+    transform: perspective(1000px) rotateY(0deg);
+  }
+  100% {
+    transform: perspective(1000px) rotateY(360deg);
+  }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes wiggle {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-3deg);
+  }
+  75% {
+    transform: rotate(3deg);
+  }
+}
+
+@keyframes gradientShift {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
   }
 }
 
