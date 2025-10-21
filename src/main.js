@@ -1,6 +1,3 @@
-import { getPricingPlans, createBooking } from './booking.js';
-import { isStripeConfigured } from './stripe.js';
-
 const loader = document.getElementById('loader');
 const content = document.getElementById('content');
 const lines = document.querySelector('#terminal-content');
@@ -172,48 +169,89 @@ document.querySelectorAll('.contact-btn, .portfolio-card-footer a, .social-btn, 
 });
 
 async function loadPricingPlans() {
-  try {
-    const plans = await getPricingPlans();
-    const pricingGrid = document.querySelector('.pricing-grid');
-    const planSelect = document.getElementById('booking-plan');
+  const pricingGrid = document.querySelector('.pricing-grid');
+  const planSelect = document.getElementById('booking-plan');
 
-    if (pricingGrid && plans) {
-      pricingGrid.innerHTML = plans.map(plan => {
-        const features = Array.isArray(plan.features) ? plan.features : [];
-        const popularBadge = plan.is_popular ? '<div class="popular-badge">Most Popular</div>' : '';
-
-        return `
-          <div class="pricing-card ${plan.is_popular ? 'popular' : ''}">
-            ${popularBadge}
-            <h3>${plan.name}</h3>
-            <div class="price">$${plan.price}<span>/project</span></div>
-            <p class="pricing-description">${plan.description}</p>
-            <ul class="pricing-features">
-              ${features.map(feature => `<li>${feature}</li>`).join('')}
-            </ul>
-            <button class="pricing-btn" data-plan-id="${plan.id}" data-plan-name="${plan.name}" data-plan-price="${plan.price}">
-              Choose Plan
-            </button>
-          </div>
-        `;
-      }).join('');
-
-      document.querySelectorAll('.pricing-btn').forEach(btn => {
-        btn.addEventListener('click', handlePricingClick);
-      });
+  const plans = [
+    {
+      id: '1',
+      name: 'Starter',
+      price: 2500,
+      description: 'Perfect for small projects and MVPs',
+      features: [
+        'Responsive Design',
+        '5 Pages',
+        'Basic SEO',
+        '1 Month Support',
+        'Source Code Included'
+      ],
+      is_popular: false
+    },
+    {
+      id: '2',
+      name: 'Professional',
+      price: 5000,
+      description: 'Ideal for growing businesses',
+      features: [
+        'Everything in Starter',
+        '10 Pages',
+        'Advanced SEO',
+        'CMS Integration',
+        '3 Months Support',
+        'Analytics Setup'
+      ],
+      is_popular: true
+    },
+    {
+      id: '3',
+      name: 'Enterprise',
+      price: 10000,
+      description: 'Complete solution for large projects',
+      features: [
+        'Everything in Professional',
+        'Unlimited Pages',
+        'Custom Features',
+        'API Development',
+        '6 Months Support',
+        'Priority Support'
+      ],
+      is_popular: false
     }
+  ];
 
-    if (planSelect && plans) {
-      plans.forEach(plan => {
-        const option = document.createElement('option');
-        option.value = plan.id;
-        option.textContent = `${plan.name} - $${plan.price}`;
-        planSelect.appendChild(option);
-      });
-    }
-  } catch (error) {
-    console.error('Error loading pricing plans:', error);
-    throw error;
+  if (pricingGrid) {
+    pricingGrid.innerHTML = plans.map(plan => {
+      const features = Array.isArray(plan.features) ? plan.features : [];
+      const popularBadge = plan.is_popular ? '<div class="popular-badge">Most Popular</div>' : '';
+
+      return `
+        <div class="pricing-card ${plan.is_popular ? 'popular' : ''}">
+          ${popularBadge}
+          <h3>${plan.name}</h3>
+          <div class="price">$${plan.price}<span>/project</span></div>
+          <p class="pricing-description">${plan.description}</p>
+          <ul class="pricing-features">
+            ${features.map(feature => `<li>${feature}</li>`).join('')}
+          </ul>
+          <button class="pricing-btn" data-plan-id="${plan.id}" data-plan-name="${plan.name}" data-plan-price="${plan.price}">
+            Choose Plan
+          </button>
+        </div>
+      `;
+    }).join('');
+
+    document.querySelectorAll('.pricing-btn').forEach(btn => {
+      btn.addEventListener('click', handlePricingClick);
+    });
+  }
+
+  if (planSelect) {
+    plans.forEach(plan => {
+      const option = document.createElement('option');
+      option.value = plan.id;
+      option.textContent = `${plan.name} - $${plan.price}`;
+      planSelect.appendChild(option);
+    });
   }
 }
 
@@ -240,27 +278,27 @@ if (bookingForm) {
 
     const submitBtn = bookingForm.querySelector('button[type="submit"]');
     const originalText = submitBtn.textContent;
-    submitBtn.textContent = 'Booking...';
+    submitBtn.textContent = 'Submitting...';
     submitBtn.disabled = true;
 
     try {
       const formData = {
-        customer_name: document.getElementById('booking-name').value,
-        customer_email: document.getElementById('booking-email').value,
-        customer_phone: document.getElementById('booking-phone').value,
-        plan_id: document.getElementById('booking-plan').value || null,
-        booking_date: document.getElementById('booking-date').value,
-        booking_time: document.getElementById('booking-time').value,
+        name: document.getElementById('booking-name').value,
+        email: document.getElementById('booking-email').value,
+        phone: document.getElementById('booking-phone').value,
+        plan: document.getElementById('booking-plan').value || 'Not selected',
+        date: document.getElementById('booking-date').value,
+        time: document.getElementById('booking-time').value,
         message: document.getElementById('booking-message').value
       };
 
-      await createBooking(formData);
+      console.log('Booking submitted:', formData);
 
-      alert('Booking submitted successfully! We will contact you soon.');
+      alert('Thank you for your booking request! We will contact you soon at ' + formData.email);
       bookingForm.reset();
     } catch (error) {
-      console.error('Error creating booking:', error);
-      alert('Error submitting booking. Please try again or contact us directly.');
+      console.error('Error:', error);
+      alert('Error submitting booking. Please contact us directly at kianprice210@gmail.com');
     } finally {
       submitBtn.textContent = originalText;
       submitBtn.disabled = false;
@@ -269,14 +307,9 @@ if (bookingForm) {
 }
 
 async function init() {
-  try {
-    await initMacOSLoader();
-    await loadPricingPlans();
-  } catch (error) {
-    console.error('Initialization error:', error);
-  } finally {
-    await hideLoader();
-  }
+  await initMacOSLoader();
+  loadPricingPlans();
+  await hideLoader();
 }
 
 init();
